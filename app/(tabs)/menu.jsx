@@ -57,7 +57,7 @@ const Menu = () => {
                         <ChevronLeft size={24} color={theme.terracotta} />
                     </TouchableOpacity>
                     <Text style={styles.menuTitle}>Coffee Menu</Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('cart')}>
                         <ShoppingBag size={24} color={theme.terracotta} />
                     </TouchableOpacity>
                 </View>

@@ -166,7 +166,7 @@ const Home = () => {
 
                 <View style={styles.recentOrdersContainer}>
                     <Text style={styles.recentOrdersTitle}>Recent Orders</Text>
-                    <TouchableWithoutFeedback onPress={() => navigation.navigate('orders')}>
+                    <TouchableWithoutFeedback onPress={() => navigation.navigate('cart')}>
                         <Text style={{ fontSize: 16, fontWeight: 'semi-bold', color: theme.primary }}>History</Text>
                     </TouchableWithoutFeedback>
                 </View>

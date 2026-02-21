@@ -19,6 +19,8 @@ const CoffeeDetail = () => {
     const route = useRoute();
     const scrollY = useRef(new Animated.Value(0)).current;
 
+    const [cartItems, setCartItems] = useState([]);
+
     // Get parameters from route
     const {
         productImage,
@@ -203,7 +205,29 @@ const CoffeeDetail = () => {
 
                 <TouchableOpacity
                     style={styles.detailAddToCartBtn}
-                    onPress={() => navigation.navigate('(tabs)', { screen: 'cart' })}
+                    onPress={
+                        setCartItems([...cartItems, {
+                            productImage: productImage,
+                            productName: productName,
+                            productDescription: productDescription,
+                            productPrice: productPrice,
+                            productSize: selectedSize,
+                            productMilk: selectedMilk,
+                            productSweetness: selectedSweetness,
+                            productQuantity: quantity,
+                        }]).then(() => navigation.navigate('(tabs)', {
+                            screen: 'cart',
+                            params: {
+                                productImage: productImage,
+                                productName: productName,
+                                productDescription: productDescription,
+                                productPrice: productPrice,
+                                productSize: selectedSize,
+                                productMilk: selectedMilk,
+                                productSweetness: selectedSweetness,
+                                productQuantity: quantity,
+                            }
+                        }))}
                 >
                     <ShoppingBag size={20} color="#FFFFFF" strokeWidth={2.5} />
                     <Text style={styles.detailAddToCartText}>Add to Cart</Text>

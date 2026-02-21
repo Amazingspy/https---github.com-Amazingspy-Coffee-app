@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, Image, TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
 import { LinearGradient } from 'expo-linear-gradient';
-import { useAppStyles } from '../_Styles';
+import { useAppStyles } from '../../constants/Styles';
 
 export default function Home() {
   const { styles, theme } = useAppStyles();

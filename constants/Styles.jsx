@@ -614,7 +614,7 @@ const createStyles = (theme) => StyleSheet.create({
         color: '#FFFFFF',
         fontSize: 16,
         fontWeight: 'bold',
-        marginLeft: 10,
+        marginLeft: 10
     },
 });
 

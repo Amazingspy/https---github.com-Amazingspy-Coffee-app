@@ -5,10 +5,10 @@ import Animated, { Extrapolation, interpolate, useAnimatedStyle } from "react-na
 import Carousel from "react-native-reanimated-carousel";
 import { Search } from "lucide-react-native";
 import { useNavigation } from '@react-navigation/native';
-import { useAppStyles } from '../_Styles';
+import { useAppStyles } from '../../constants/Styles';
 
 const PAGE_WIDTH = Dimensions.get('window').width;
-console.log(PAGE_WIDTH + 8);
+// console.log(PAGE_WIDTH + 8);
 
 const PROMO_DATA = [
     { id: '1', title: 'Buy 1 Get 1 Free\non Latte', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA3hiW90Dvkgtd9WanH-4G5alCTz4GcnzOHkJxCabWVhairyNwqgxMcTk1H1Vsou0dDGEj6OYcMejuU_Jd_RJdA7z1iAbeE4SfOW48E7VjeA4d6mKABWCKoyaTg0EGCzOr9iDlZBe0Ww6IBzeQIAc_RpxddU6BlPRLEZnhXeUwBmd1ZEtnBvgtZBQW95oz_q7uf6HtvSaGSetOanND1p93N8O9xk0T3WDveabCGKR1s3zFF_RwM_4MD-vIk3vxWqxDWA-9jKu5qhj4J' },
@@ -101,7 +101,7 @@ const Home = () => {
                         autoPlayInterval={3000}
                         data={PROMO_DATA}
                         scrollAnimationDuration={1000}
-                        onSnapToItem={(index) => console.log('current index:', index)}
+                        onSnapToItem={(index) => { }}
                         renderItem={renderPromoItem}
                         mode="parallax"
                         modeConfig={{
@@ -131,7 +131,7 @@ const Home = () => {
                             />
                             <Text style={styles.recommendedTitle}>Cold Brew</Text>
                             <Text style={styles.recommendedDescription}>Velvet Finish</Text>
-                            <Text style={styles.recommendedPrice}>$5.25</Text>
+                            <Text style={styles.recommendedPrice}>₹525</Text>
                         </View>
                         <View style={styles.recommendedCard}>
                             <Image
@@ -140,7 +140,7 @@ const Home = () => {
                             />
                             <Text style={styles.recommendedTitle}>Coffee Latte</Text>
                             <Text style={styles.recommendedDescription}>A rich and creamy</Text>
-                            <Text style={styles.recommendedPrice}>$4.25</Text>
+                            <Text style={styles.recommendedPrice}>₹425</Text>
                         </View>
                         <View style={styles.recommendedCard}>
                             <Image
@@ -149,7 +149,7 @@ const Home = () => {
                             />
                             <Text style={styles.recommendedTitle}>Iced Americano</Text>
                             <Text style={styles.recommendedDescription}>Crisp & refreshing</Text>
-                            <Text style={styles.recommendedPrice}>$3.95</Text>
+                            <Text style={styles.recommendedPrice}>₹395</Text>
                         </View>
                         <View style={styles.recommendedCard}>
                             <Image
@@ -158,7 +158,7 @@ const Home = () => {
                             />
                             <Text style={styles.recommendedTitle}>Caramel Macchiato</Text>
                             <Text style={styles.recommendedDescription}>Rich & creamy</Text>
-                            <Text style={styles.recommendedPrice}>$3.95</Text>
+                            <Text style={styles.recommendedPrice}>₹395</Text>
                         </View>
 
                     </ScrollView>

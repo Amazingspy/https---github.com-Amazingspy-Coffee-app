@@ -14,12 +14,12 @@ import React, { useState } from 'react'
 import { Link } from "expo-router";
 import { Mail, Lock, Eye, EyeOff, User, ArrowRight } from 'lucide-react-native'
 import { LinearGradient } from 'expo-linear-gradient';
-import { useAppStyles } from '../_Styles'
+import { useAppStyles } from '../../constants/Styles';
 
 const Signup = () => {
     const { styles, theme } = useAppStyles();
     const [passwordVisible, setPasswordVisible] = useState(false);
-    const coffeeImage = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDwlMKehHVqC-x5VIhnRhWsesm25w4VJxmWFlBOZyALRZU9bEJAPruW7qgeBLTY-QF2yBY4sm2qFahv4SRA1m28dsoh1pakGhPN46VZLnjjStNwfvCou4dKUpI7YcHneM7gSsbaJcnRelAsjccPk5ae-xHig9A68yHVcX38MFVcZg3rIoRZrWwKpafdn2LPjuMi97BXcVQI2ghiJxHGUd-fUGa9K-CSQYnHhmfsoWEzHKbwbs8akUUAt4JRlHtKpU9nD_2XcHUwpoBH'
+    const coffeeImage = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDwlMKehHVqC-x5VIhnRhWsesm25w4VJxmWFlBOZyALRZU9bEJAPruW7qgeBLTY-QF2yBY4sm2qFahv4SRA1m28dsoh1pakGhPN46VZLnjjStNwfvCou4dKUpI7YcHneM7gSsbaJcnRelAsjccPk5ae-xHig9A68yHVcX38MFVcZg3rIoRZrWwKpU9nD_2XcHUHwpoBH'
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

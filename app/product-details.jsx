@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Image, ImageBackground, Animated } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { useAppStyles } from './_Styles';
+import { useAppStyles } from "../constants/Styles";
 import { ChevronLeft, Heart, Star, Minus, Plus, ShoppingBag, Coffee } from 'lucide-react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useCart } from '../context/CartContext';
 
 const MILK_OPTIONS = ['Whole', 'Oat', 'Almond', 'Soy', 'Coconut'];
 const SWEETNESS_OPTIONS = ['0%', '25%', '50%', '75%', '100%'];
@@ -17,9 +18,8 @@ const CoffeeDetail = () => {
     const { styles, theme } = useAppStyles();
     const navigation = useNavigation();
     const route = useRoute();
+    const { addToCart } = useCart();
     const scrollY = useRef(new Animated.Value(0)).current;
-
-    const [cartItems, setCartItems] = useState([]);
 
     // Get parameters from route
     const {
@@ -31,7 +31,7 @@ const CoffeeDetail = () => {
         productImage: 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?q=80&w=1000',
         productName: 'Caramel Macchiato',
         productDescription: 'Freshly steamed milk with vanilla-flavored syrup is marked with espresso and topped with caramel drizzle for an oh-so-sweet finish. Perfectly balanced for your morning boost.',
-        productPrice: '$4.50'
+        productPrice: '₹450'
     };
 
     const [isFavorite, setIsFavorite] = useState(false);
@@ -205,8 +205,8 @@ const CoffeeDetail = () => {
 
                 <TouchableOpacity
                     style={styles.detailAddToCartBtn}
-                    onPress={
-                        setCartItems([...cartItems, {
+                    onPress={() => {
+                        addToCart({
                             productImage: productImage,
                             productName: productName,
                             productDescription: productDescription,
@@ -215,25 +215,18 @@ const CoffeeDetail = () => {
                             productMilk: selectedMilk,
                             productSweetness: selectedSweetness,
                             productQuantity: quantity,
-                        }]).then(() => navigation.navigate('(tabs)', {
-                            screen: 'cart',
-                            params: {
-                                productImage: productImage,
-                                productName: productName,
-                                productDescription: productDescription,
-                                productPrice: productPrice,
-                                productSize: selectedSize,
-                                productMilk: selectedMilk,
-                                productSweetness: selectedSweetness,
-                                productQuantity: quantity,
-                            }
-                        }))}
+                        });
+
+                        navigation.navigate('(tabs)', {
+                            screen: 'cart'
+                        });
+                    }}
                 >
                     <ShoppingBag size={20} color="#FFFFFF" strokeWidth={2.5} />
                     <Text style={styles.detailAddToCartText}>Add to Cart</Text>
                 </TouchableOpacity>
             </View>
-        </View>
+        </View >
     );
 };
 

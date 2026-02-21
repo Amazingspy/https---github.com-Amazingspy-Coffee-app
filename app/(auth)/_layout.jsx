@@ -1,5 +1,5 @@
 import { Stack } from "expo-router";
-import { useAppStyles } from "../_Styles";
+import { useAppStyles } from "../../constants/Styles";
 
 export default function AuthLayout() {
     const { styles } = useAppStyles();

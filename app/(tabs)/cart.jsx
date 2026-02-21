@@ -1,34 +1,16 @@
-import { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Image } from 'react-native'
 import React from 'react'
-import { useAppStyles } from '../_Styles'
-import { ChevronLeft, ShoppingCart, Trash2 } from 'lucide-react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { View, Text, TouchableOpacity, ScrollView, Image, Platform } from 'react-native'
+import { useAppStyles } from '../../constants/Styles'
+import { ChevronLeft, ShoppingCart, Trash2, Minus, Plus } from 'lucide-react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useCart } from '../../context/CartContext';
 
 const Cart = () => {
     const { styles, theme } = useAppStyles();
-    const route = useRoute();
     const navigation = useNavigation();
+    const { cartItems, removeFromCart, cartTotal, updateCartItemQuantity } = useCart();
 
-    const [cartItems, setCartItems] = useState([]);
-
-    const removeItem = (productName) => {
-        setCartItems(cartItems.filter(item => item.productName !== productName));
-        console.log('Item removed', cartItems);
-    };
-    // Get parameters from route with safety fallback
-    const {
-        productImage,
-        productName,
-        productDescription,
-        productPrice,
-        productSize,
-        productMilk,
-        productSweetness,
-        productQuantity
-    } = route.params || {};
-
-    if (!productName) {
+    if (cartItems.length === 0) {
         return (
             <View style={styles.container}>
                 <View style={styles.menuheader}>
@@ -49,7 +31,7 @@ const Cart = () => {
                         style={[styles.claimButton, { marginTop: 30, width: '100%' }]}
                         onPress={() => navigation.navigate('menu')}
                     >
-                        <Text style={styles.claimButtonText}>Browse Menu</Text>
+                        <Text style={[styles.claimButtonText, { textAlign: 'center' }]}>Browse Menu</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -68,62 +50,118 @@ const Cart = () => {
                 </View>
             </View>
 
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ padding: 20 }}>
-                <View style={[styles.menuItemCard, { height: 'auto', padding: 15, flexDirection: 'row', alignItems: 'flex-start' }]}>
-                    <Image source={{ uri: productImage }} style={[styles.menuItemImage, { width: 100, height: 100, borderRadius: 15 }]} />
-                    <View style={{ flex: 1, marginLeft: 15 }}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={[styles.menuItemName, { fontSize: 18 }]}>{productName}</Text>
-                            <TouchableOpacity onPress={() => removeItem(productName)}>
-                                <Trash2 size={24} color={theme.terracotta} />
-                            </TouchableOpacity>
-                        </View>
-                        <Text style={[styles.menuItemDescription, { fontSize: 13 }]} numberOfLines={2}>{productDescription}</Text>
-
-                        <View style={{ flexDirection: 'row', marginTop: 8, flexWrap: 'wrap' }}>
-                            <View style={{ backgroundColor: theme.card, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6, marginRight: 6, marginBottom: 4 }}>
-                                <Text style={{ fontSize: 11, color: theme.textMuted }}>{productSize}</Text>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ padding: 15, paddingBottom: 350 }}>
+                {cartItems.map((item) => (
+                    <View key={item.id} style={[styles.menuItemCard, { height: 'auto', padding: 15, flexDirection: 'row', alignItems: 'stretch', marginBottom: 15 }]}>
+                        <Image source={{ uri: item.productImage }} style={[styles.menuItemImage, { width: 110, height: 'auto', borderRadius: 15 }]} />
+                        <View style={{ flex: 1, marginLeft: 15 }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <Text style={[styles.menuItemName, { fontSize: 18 }]}>{item.productName}</Text>
+                                <TouchableOpacity onPress={() => removeFromCart(item.id)}>
+                                    <Trash2 size={22} color={theme.terracotta} />
+                                </TouchableOpacity>
                             </View>
-                            <View style={{ backgroundColor: theme.card, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6, marginRight: 6, marginBottom: 4 }}>
-                                <Text style={{ fontSize: 11, color: theme.textMuted }}>{productMilk} Milk</Text>
+                            <Text style={[styles.descriptionText || styles.menuItemDescription, { fontSize: 13, color: theme.textMuted }]} numberOfLines={2}>
+                                {item.productDescription}
+                            </Text>
+
+                            <View style={{ flexDirection: 'row', marginTop: 2, flexWrap: 'wrap' }}>
+                                <View style={{ backgroundColor: theme.card, paddingHorizontal: 2, paddingVertical: 6, borderRadius: 6, marginRight: 6, marginBottom: 4 }}>
+                                    <Text style={{ fontSize: 10, color: theme.textMuted, fontWeight: 'bold' }}>{item.productSize}</Text>
+                                </View>
+                                <View style={{ backgroundColor: theme.card, paddingHorizontal: 8, paddingVertical: 6, borderRadius: 6, marginRight: 6, marginBottom: 4 }}>
+                                    <Text style={{ fontSize: 10, color: theme.textMuted, fontWeight: 'bold' }}>{item.productMilk} Milk</Text>
+                                </View>
+                                <View style={{ backgroundColor: theme.card, paddingHorizontal: 8, paddingVertical: 6, borderRadius: 6, marginBottom: 4 }}>
+                                    <Text style={{ fontSize: 10, color: theme.textMuted, fontWeight: 'bold' }}>{item.productSweetness} Sugar</Text>
+                                </View>
                             </View>
-                            <View style={{ backgroundColor: theme.card, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6, marginBottom: 4 }}>
-                                <Text style={{ fontSize: 11, color: theme.textMuted }}>{productSweetness} Sugar</Text>
+
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 0 }}>
+                                <Text style={[styles.menuItemPrice, { fontSize: 20 }]}>{item.productPrice}</Text>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: theme.card, borderRadius: 10, padding: 5 }}>
+                                    <Text style={{ fontWeight: 'bold', color: theme.textMain, marginHorizontal: 12, minWidth: 20, textAlign: 'center', fontSize: 16 }}>
+                                        Qty:
+                                    </Text>
+                                    <View style={{ backgroundColor: '#fff', borderRadius: 10, flexDirection: 'row', alignItems: 'center', padding: 5, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5 }}>
+                                        <TouchableOpacity
+                                            onPress={() => updateCartItemQuantity(item.id, item.productQuantity - 1)}
+                                            style={{ padding: 5 }}
+                                        >
+                                            <Minus size={18} color={theme.terracotta} />
+                                        </TouchableOpacity>
+                                        <Text style={{ fontWeight: 'bold', color: theme.textMain, marginHorizontal: 12, minWidth: 20, textAlign: 'center' }}>
+                                            {item.productQuantity}
+                                        </Text>
+                                        <TouchableOpacity
+                                            onPress={() => updateCartItemQuantity(item.id, item.productQuantity + 1)}
+                                            style={{ padding: 5 }}
+                                        >
+                                            <Plus size={18} color={theme.terracotta} />
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
                             </View>
                         </View>
-
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
-                            <Text style={[styles.menuItemPrice, { fontSize: 20 }]}>{productPrice}</Text>
-                            <Text style={{ fontWeight: '600', color: theme.textMuted }}>Qty: {productQuantity}</Text>
-                        </View>
                     </View>
-                </View>
-
-                {/* Checkout Summary Placeholder */}
-                <View style={{ marginTop: 30, backgroundColor: theme.card, borderRadius: 20, padding: 20 }}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: theme.textMain, marginBottom: 15 }}>Order Summary</Text>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
-                        <Text style={{ color: theme.textMuted }}>Subtotal</Text>
-                        <Text style={{ color: theme.textMain, fontWeight: '600' }}>{productPrice}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
-                        <Text style={{ color: theme.textMuted }}>Delivery Fee</Text>
-                        <Text style={{ color: theme.textMain, fontWeight: '600' }}>$1.00</Text>
-                    </View>
-                    <View style={{ height: 1, backgroundColor: theme.border, marginVertical: 10 }} />
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={{ fontSize: 16, fontWeight: 'bold', color: theme.textMain }}>Total</Text>
-                        <Text style={{ fontSize: 18, fontWeight: 'bold', color: theme.primary }}>
-                            ${(parseFloat(productPrice.replace('$', '')) + 1).toFixed(2)}
-                        </Text>
-                    </View>
-                </View>
-
-                <TouchableOpacity style={[styles.detailAddToCartBtn, { marginTop: 30, width: '100%' }]}>
-                    <Text style={styles.detailAddToCartText}>Checkout</Text>
-                </TouchableOpacity>
+                ))}
             </ScrollView>
-        </View>
+
+            <View style={{
+                backgroundColor: '#FFF',
+                borderTopLeftRadius: 30,
+                borderTopRightRadius: 30,
+                padding: 25,
+                paddingBottom: Platform.OS === 'ios' ? 40 : 25,
+                elevation: 20,
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: -10 },
+                shadowOpacity: 0.1,
+                shadowRadius: 10,
+                position: 'absolute',
+                bottom: 0,
+                width: '100%',
+                // Use a fixed height or minHeight to ensure it fits the content
+                height: 300,
+            }}>
+                <Text style={{ fontSize: 18, fontWeight: 'bold', color: theme.textMain, marginBottom: 15 }}>Order Summary</Text>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+                    <Text style={{ color: theme.textMuted }}>Subtotal</Text>
+                    <Text style={{ color: theme.textMain, fontWeight: '600' }} >₹{cartTotal.toFixed(2)}</Text>
+                </View>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+                    <Text style={{ color: theme.textMuted }}>Delivery Fee</Text>
+                    <Text style={{ color: theme.textMain, fontWeight: '600' }}>₹80.00</Text>
+                </View>
+
+                <View style={{ height: 1, backgroundColor: theme.background === '#121212' ? '#333' : '#F1F5F9', marginVertical: 10 }} />
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 25 }}>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: theme.textMain }}>Total</Text>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: theme.primary }}>
+                        ₹{(cartTotal + 80).toFixed(2)}
+                    </Text>
+                </View>
+
+                <TouchableOpacity style={{
+                    backgroundColor: theme.primary,
+                    borderRadius: 20,
+                    padding: 18,
+                    shadowColor: theme.primary,
+                    shadowOffset: { width: 0, height: 4 },
+                    shadowOpacity: 0.3,
+                    shadowRadius: 8,
+                    elevation: 5
+                }}>
+                    <Text style={{ color: '#fff', fontWeight: 'bold', textAlign: 'center', fontSize: 18 }}>Checkout</Text>
+                </TouchableOpacity>
+            </View>
+
+        </View >
     );
 }
 

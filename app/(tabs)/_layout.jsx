@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 import React from "react";
 import { Home, Coffee, Heart, User, ShoppingBag } from "lucide-react-native";
-import { useAppStyles } from "../_Styles";
+import { useAppStyles } from "../../constants/Styles";
 
 export default function TabLayout() {
   const { theme } = useAppStyles();

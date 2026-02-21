@@ -14,7 +14,7 @@ import React, { useState } from 'react'
 import { Link } from 'expo-router';
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react-native'
 import { LinearGradient } from 'expo-linear-gradient';
-import { useAppStyles } from "../_Styles"
+import { useAppStyles } from '../../constants/Styles';
 
 const Login = () => {
     const { styles, theme } = useAppStyles();

@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { LogOut, User, ChevronRight, Settings, Bell, Shield } from 'lucide-react-native';
-import { useAppStyles } from '../_Styles';
+import { useAppStyles } from '../../constants/Styles';
 
 const Profile = () => {
     const router = useRouter();
